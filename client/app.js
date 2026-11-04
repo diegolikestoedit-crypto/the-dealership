@@ -1017,7 +1017,19 @@
     'p-decor': (d) => { const cur = S.profile.selected.decor.slice(); const i = cur.indexOf(d.k); i >= 0 ? cur.splice(i, 1) : cur.push(d.k); updProfile({ selected: { decor: cur.slice(-4) } }); },
   };
   function errT(r) { if (r && r.ok === false) { toast(r.error, 'bad'); SFX.play('warn'); } }
-  function normBase(s) { s = (s || '').trim().replace(/\/+$/, ''); if (!s) return LOCAL; if (!/^https?:\/\//.test(s)) s = 'http://' + s; if (!/:\d+$/.test(s)) s += ':8642'; return s; }
+  // Turn what the player typed into a server address. Only a bare LAN address ("192.168.1.20")
+  // gets the desktop game's default port; web addresses (https://….onrender.com) are used as-is.
+  function normBase(s) {
+    s = (s || '').trim().replace(/\/+$/, '');
+    if (!s) return LOCAL;
+    const typedScheme = /^https?:\/\//.test(s);
+    if (!typedScheme) s = (/^(localhost|\d{1,3}(\.\d{1,3}){3})(:\d+)?$/.test(s) ? 'http://' : 'https://') + s;
+    try {
+      const u = new URL(s);
+      if (!u.port && u.protocol === 'http:' && /^(localhost|\d{1,3}(\.\d{1,3}){3})$/.test(u.hostname)) u.port = '8642';
+      return u.origin;
+    } catch (e) { return s; }
+  }
   function setOffer(c, val) {
     S.draft.offer[c.id] = val;
     const a = $('#offer-in'), b = $('#offer-range');
