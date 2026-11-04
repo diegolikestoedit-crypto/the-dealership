@@ -76,36 +76,35 @@ LINES = {
     "callback": ["Wait! Wait... fine. ${ask} and it's yours.", "Hold on! ${ask}? Please?", "Okay okay — ${ask}, last chance."],
 }
 
-PERSUADE = {
-    "flaws": {"name": "Point out flaws", "desc": "Use what you've found. Bluffing is risky."},
-    "cash": {"name": "Cash right now", "desc": "Works on people who need money fast."},
-    "reputation": {"name": "Vouch for your shop", "desc": "Stronger with high reputation."},
-    "market": {"name": "\"The market is soft\"", "desc": "Only convincing when demand really is down."},
-}
-
-TOOLS = {
-    "inspect": {"name": "Condition Inspection", "cost": 150, "time": 3, "desc": "Reveals true condition."},
-    "scan": {"name": "Authenticity Scan", "cost": 450, "time": 5, "desc": "Detects counterfeits. Lab L2 also spots modifications."},
-    "expert": {"name": "Lab Certification", "cost": 1100, "time": 8, "desc": "Lab tests reveal everything, including rare editions. Never wrong."},
-}
+# One simple tool: examining an item reveals its true condition and whether it's genuine.
+EXAMINE_FEE = [300, 150, 0]  # by Appraisal Desk level
 
 UPGRADES = {
-    "showroom": {"name": "Showroom Expansion", "costs": [6000, 13000, 24000], "values": [4, 6, 8, 10],
-                 "desc": "More display slots for items on sale (+1 staff slot per level)."},
-    "storage": {"name": "Back Room Storage", "costs": [4000, 9000, 18000], "values": [8, 12, 18, 26],
-                "desc": "Hold more items in total."},
-    "lab": {"name": "Appraisal Lab", "costs": [7000, 16000], "values": [0, 1, 2],
-            "desc": "Tools 30% / 55% cheaper and faster. Level 2 detects modifications."},
-    "cases": {"name": "Premium Display Cases", "costs": [5000, 11000, 20000], "values": [0, 1, 2, 3],
-              "desc": "+8% buyer appeal per level."},
-    "ads": {"name": "Advertising", "costs": [4500, 10000, 19000], "values": [0, 1, 2, 3],
-            "desc": "More sellers walk through your door."},
-    "service": {"name": "Customer Lounge", "costs": [4000, 9500], "values": [0, 1, 2],
-                "desc": "Sellers wait and negotiate 20% longer per level."},
-    "security": {"name": "Security System", "costs": [5000, 12000], "values": [0, 1, 2],
-                 "desc": "Deters theft and softens fake-sale complaints."},
-    "specialty": {"name": "Specialty Corner", "costs": [9000], "values": [0, 1],
-                  "desc": "Pick a category: buyers looking for it favour your shop (+15% appeal)."},
+    "shop": {"name": "Bigger Shop", "icon": "🏬", "costs": [15000, 35000], "desc": "+2 visitors every day per level."},
+    "storage": {"name": "Back Room", "icon": "📦", "costs": [8000, 18000, 36000], "values": [8, 12, 18, 26],
+                "desc": "Hold more items in your stock."},
+    "desk": {"name": "Appraisal Desk", "icon": "🔍", "costs": [10000, 25000],
+             "desc": "Examining items costs $300 → $150 → free."},
+    "cases": {"name": "Display Cases", "icon": "💎", "costs": [10000, 22000, 40000],
+              "desc": "Buyers pay 8% more per level."},
+}
+
+# Buyers who come to your counter wanting something from your stock.
+BUYERS = {
+    "bargain": {"label": "Bargain hunter", "wtp": 0.88, "open": (0.55, 0.7), "rounds": 4, "conc": 0.35},
+    "regular": {"label": "Regular customer", "wtp": 1.0, "open": (0.65, 0.8), "rounds": 4, "conc": 0.45},
+    "enthusiast": {"label": "Enthusiast", "wtp": 1.15, "open": (0.7, 0.85), "rounds": 5, "conc": 0.5},
+    "collector": {"label": "Big collector", "wtp": 1.32, "open": (0.7, 0.9), "rounds": 3, "conc": 0.4},
+}
+BUYER_LINES = {
+    "greet": ["That {item} caught my eye. Would you take ${offer}?", "I've been looking for a {item}! ${offer}?",
+              "How about ${offer} for your {item}?", "I'll give you ${offer} for the {item}."],
+    "counter": ["Hmm... ${offer}?", "I can go to ${offer}.", "${offer}, and that's generous.", "Let's meet at ${offer}."],
+    "final": ["${offer} is my limit.", "I really can't go above ${offer}."],
+    "accept": ["Deal! Pleasure doing business.", "Sold! I'll take it.", "Great, wrap it up for me!"],
+    "insulted": ["That's way too much.", "Are you serious?", "Not at that price."],
+    "leave": ["I'll look somewhere else.", "Too rich for me. Bye.", "Maybe another time."],
+    "fake": ["Wait... this is a fake! I'm not buying that.", "This isn't genuine. Shame on you."],
 }
 
 # Specialists you can hire. Stars 1-3; wages are paid weekly (first week prorated).
@@ -113,15 +112,14 @@ WAGES = {1: 2000, 2: 10000, 3: 50000}
 MAX_EMPLOYEES = 4
 EMPLOYEES = {
     "mechanic": {"name": "Mechanic", "icon": "🔧",
-                 "desc": "Repairs any item in your stock for a fee. Takes days, depending on the item and how broken it is.",
+                 "desc": "Repairs items in your stock for a fee. Takes days, depending on the item and how broken it is.",
                  "stars": ["Repairs up to Good · 1 job at a time", "Repairs up to Excellent · 2 jobs · faster & cheaper",
                            "Restores to Brand New · 3 jobs · fastest & cheapest"]},
     "mentalist": {"name": "Mentalist", "icon": "🔮",
-                  "desc": "Reads sellers' minds: much better persuasion, and a sense of how low they'll really go.",
-                  "stars": ["+15% persuasion · reveals personality & exact mood", "+30% persuasion · senses their lowest price (±15%)",
-                            "+45% persuasion · knows their lowest price (±6%)"]},
+                  "desc": "Reads people: senses how low sellers will go and how high buyers will pay.",
+                  "stars": ["Reveals personality & exact mood", "Senses their limit (±15%)", "Knows their limit (±5%)"]},
     "lucky": {"name": "Lucky Kid", "icon": "🍀",
-              "desc": "Things just go your way: offers land more often, buyers tip, thieves trip over themselves.",
+              "desc": "Things just go your way: deals land more often, buyers tip, thieves fail.",
               "stars": ["Small luck boost", "Good luck: deals land more, buyers tip more", "Unreal luck"]},
     "expert": {"name": "Appraisal Expert", "icon": "🎓",
                "desc": "Instantly tells you an item's real value for free — but can get very rare pieces wrong.",
@@ -129,17 +127,16 @@ EMPLOYEES = {
                          "Unlimited · rarely wrong"]},
     "negotiator": {"name": "Negotiator", "icon": "💬", "desc": "Haggles for you: sellers accept lower prices.",
                    "stars": ["Sellers' floor −4%", "Sellers' floor −8%", "Sellers' floor −12%"]},
-    "sales": {"name": "Salesperson", "icon": "🤝", "desc": "Draws buyers to your shop and closes sales slightly above their budget.",
-              "stars": ["+5% appeal · closes +4%", "+10% appeal · closes +8%", "+15% appeal · closes +12%"]},
-    "security": {"name": "Security Guard", "icon": "🛡️", "desc": "Stops shoplifters and spots dishonest sellers.",
-                 "stars": ["Stops 30% of thefts · flags crooks", "Stops 60% · also spots lies about condition",
-                           "Stops 90% · flags everything shady"]},
-    "analyst": {"name": "Market Analyst", "icon": "📊", "desc": "Forecasts tomorrow's market every morning.",
-                "stars": ["Rough forecast", "Exact forecast", "Exact forecast + names tomorrow's event"]},
+    "sales": {"name": "Salesperson", "icon": "🤝", "desc": "More of your visitors are buyers, and they pay more.",
+              "stars": ["Buyers pay +5%", "Buyers pay +10%", "Buyers pay +15%"]},
+    "security": {"name": "Security Guard", "icon": "🛡️", "desc": "Stops night-time burglaries and spots dishonest sellers.",
+                 "stars": ["Stops 30% of thefts · flags crooks", "Stops 60% · spots lies about condition", "Stops 90% · flags everything shady"]},
+    "analyst": {"name": "Market Analyst", "icon": "📊", "desc": "Tells you tomorrow's hot and cold categories.",
+                "stars": ["Tomorrow's hot category", "+ tomorrow's cold category", "+ how big the swing is"]},
     "scout": {"name": "Auction Scout", "icon": "🔭", "desc": "Inspects auction lots before bidding opens — only you see the report.",
               "stars": ["Reveals lot condition", "+ authenticity", "+ rare editions"]},
-    "marketer": {"name": "Marketer", "icon": "📣", "desc": "Advertising and word of mouth: more sellers and more buyers.",
-                 "stars": ["+15% sellers · +10% buyers", "+30% sellers · +20% buyers", "+45% sellers · +30% buyers"]},
+    "marketer": {"name": "Marketer", "icon": "📣", "desc": "Advertising: more visitors come to your shop every day.",
+                 "stars": ["+1 visitor a day", "+2 visitors a day", "+3 visitors a day"]},
 }
 AI_HIRES = {"cautious": ["security", "expert"], "roller": ["sales", "marketer"], "collector": ["expert", "scout"],
             "flipper": ["marketer", "negotiator"], "bargain": ["negotiator", "lucky"], "antique": ["mechanic", "expert"],

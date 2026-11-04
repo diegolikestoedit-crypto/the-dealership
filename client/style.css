@@ -370,3 +370,39 @@ img.px.pending { opacity: 0; }
 .three div { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
 
 .hsec { border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 12px; } .hsec h2 { font-size: 20px; color: var(--gold); }
+
+/* ---- counter loop ---- */
+.counter2 { display: grid; grid-template-columns: minmax(380px, 1fr) minmax(420px, 1.05fr); gap: 12px; height: max(640px, calc(100vh - 128px)); }
+.counter2 .scene { min-height: 0; }
+.deal { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow-y: auto; }
+.vtag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .08em; padding: 2px 8px; border-radius: 5px; margin-bottom: 4px; }
+.vtag.sell { background: #6cc3ff22; color: var(--info); border: 1px solid #6cc3ff66; }
+.vtag.buy { background: #5fd38d22; color: var(--good); border: 1px solid #5fd38d66; }
+.bigprice { font-family: var(--serif); font-size: 32px; font-weight: 700; }
+.pdots { display: flex; gap: 4px; margin-top: 3px; } .pdots i { width: 14px; height: 8px; border-radius: 4px; background: #ffffff18; } .pdots i.on { background: var(--info); }
+.pricebox input[type=number] { flex: 1; font-size: 22px; font-weight: 700; text-align: center; }
+.pricebox .row .btn { font-size: 20px; width: 44px; }
+.pricebox .quick { margin-top: 6px; }
+.bigacts { display: grid; grid-template-columns: 1.3fr 1.3fr 1fr; gap: 8px; }
+.bigacts .btn { padding: 12px 8px; font-size: 15px; white-space: normal; }
+.btn.xl { padding: 18px 34px; font-size: 22px; border-radius: 14px; }
+.bigstate { text-align: center; padding: 40px 10px; }
+.vcount { font-family: var(--serif); font-size: 22px; margin-bottom: 16px; color: var(--muted); }
+.vdot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); display: inline-block; } .vdot.used { background: #ffffff22; }
+.result { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel2); animation: fadein .3s; }
+.result.good, .result.sale { border-color: #5fd38d77; } .result.bad { border-color: #ff6b6b77; }
+.result .ricon { font-size: 30px; }
+.chip.hotc { background: #ff8a3d22; border-color: #ff8a3d77; color: #ffb27a; } .chip.coldc { background: #6cc3ff1a; border-color: #6cc3ff55; color: #9fd8ff; }
+.tab kbd.tk { font-size: 9px; padding: 0 3px; opacity: .5; }
+.three-steps { grid-template-columns: repeat(3, 1fr) !important; }
+.counter2 .shelves { gap: 44px 8px; }
+.deal > * { flex-shrink: 0; }
+.deal .dialog { height: 84px; }
+
+.deal { gap: 8px; }
+.deal .dialog { height: 62px; }
+.tools.slim { display: flex; gap: 6px; } .tools.slim .btn { flex: 1; flex-direction: row; justify-content: center; gap: 6px; padding: 6px; }
+.tools.slim .btn small { margin-left: 4px; }
+.deal .range { margin: 14px 6px 22px; }
+.deal .itemcard { grid-template-columns: 72px 1fr; } .deal .itemcard .pic { height: 72px; }
+.pricebox input[type=number] { font-size: 20px; padding: 5px; }
