@@ -1,0 +1,14 @@
+#!/bin/bash
+# Starts the local game server (no terminal window) and opens the game window.
+# The server exits automatically ~45s after the game window is closed, or via Quit Game.
+DIR="$(cd "$(dirname "$0")/../Resources" && pwd)"
+PY=/usr/bin/python3
+command -v python3 >/dev/null 2>&1 && PY="$(command -v python3)"
+LOG="$HOME/Library/Application Support/TheDealership"
+mkdir -p "$LOG"
+# If a server is already running, just open another window onto it.
+if curl -s -m 1 http://localhost:8642/api/info >/dev/null 2>&1; then
+  open -na "Google Chrome" --args --app=http://localhost:8642/ 2>/dev/null || open http://localhost:8642/
+  exit 0
+fi
+exec "$PY" "$DIR/server/server.py" --exit-when-idle 45 >"$LOG/server.log" 2>&1
